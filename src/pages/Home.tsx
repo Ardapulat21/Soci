@@ -4,7 +4,7 @@ import Header from "../layouts/Header";
 
 const Home = () => {
   return (
-    <div>
+    <div className="bg-linear-to-r/decreasing from-indigo-200">
       <Header />
       <Contents />
       <Footer />

@@ -30,7 +30,7 @@ const PostCreationComponent = ({ onClose }: PostCreationComponentProps) => {
 
     formData.append("date", new Date().toString());
 
-    fetch("http://localhost:3000/api/addpost", {
+    fetch("http://localhost:3000/api/post", {
       method: "POST",
       body: formData,
     })

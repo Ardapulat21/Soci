@@ -6,12 +6,12 @@ const Header = () => {
 
   return (
     <div className="fixed w-full">
-      <div className="flex flex-row justify-between px-3 py-1 bg-gray-50 text-blue-400">
+      <div className="flex flex-row justify-between px-3 py-1 text-blue-400">
         <div className="text-xl font-medium italic">
           <p>SOCI</p>
         </div>
         <div className="flex flex-row space-x-4 italic items-center ">
-          <form className="flex px-2 w-40 border-1 border-gray-300 text-gray-600 rounded-lg transition-all duration-300 ">
+          <form className="flex px-2 w-40 border-1  border-gray-300 bg-white text-gray-600 rounded-lg transition-all duration-300 ">
             <input className="outline-none overflow-hidden max-w-30" />
             <Search
               className="text-gray-600"

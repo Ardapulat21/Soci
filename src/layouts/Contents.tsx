@@ -29,7 +29,7 @@ const Contents = () => {
   const [isPostCreationWindowOpen, setIsPostCreationWindowOpen] =
     useState(false);
   const updateContents = () => {
-    fetch("http://localhost:3000/api/getposts")
+    fetch("http://localhost:3000/api/post")
       .then((data) => data.json())
       .then((data) => {
         const sortedData = data.sort(
@@ -45,10 +45,10 @@ const Contents = () => {
     updateContents();
   }, []);
   return (
-    <div className="pt-10 bg-gray-50 min-h-screen w-100 mx-auto">
+    <div className="pt-10 min-h-screen w-100 mx-auto">
       <div className="flex flex-row justify-start w-full py-3 ">
         <button
-          className="flex flex-row ml-2 border border-gray-300 py-1 px-2 rounded-full text-s font-light text-blue-500 hover:cursor-pointer"
+          className="flex flex-row ml-2 border border-gray-300 bg-white py-1 px-2 rounded-full text-s font-light text-blue-500 hover:cursor-pointer"
           onClick={() => {
             setIsPostCreationWindowOpen(!isPostCreationWindowOpen);
           }}

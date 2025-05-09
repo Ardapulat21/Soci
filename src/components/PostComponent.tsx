@@ -17,7 +17,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
     SetCommentToBeAdded("");
   };
   return (
-    <div className="w-full border-1 border-gray-300 shadow p-4 mb-2">
+    <div className="w-full border-1 border-gray-300 bg-white shadow p-4 mb-2">
       <div className="flex flex-row mb-2">
         <img
           className="size-12 object-cover rounded-full "
