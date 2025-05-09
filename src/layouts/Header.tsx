@@ -11,7 +11,7 @@ const Header = () => {
           <p>SOCI</p>
         </div>
         <div className="flex flex-row space-x-4 italic items-center ">
-          <div className="flex px-2 w-40 border-1 border-gray-300 text-gray-600 rounded-lg transition-all duration-300 ">
+          <form className="flex px-2 w-40 border-1 border-gray-300 text-gray-600 rounded-lg transition-all duration-300 ">
             <input className="outline-none overflow-hidden max-w-30" />
             <Search
               className="text-gray-600"
@@ -19,7 +19,7 @@ const Header = () => {
                 alert("heh");
               }}
             />
-          </div>
+          </form>
           <button className="hover:text-blue-300 rounded-full">Home</button>
           <button className="hover:text-blue-300 rounded-full">Friends</button>
           <button className="hover:text-blue-300 rounded-full">Explore</button>

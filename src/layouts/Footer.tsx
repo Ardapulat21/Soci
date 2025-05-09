@@ -1,4 +1,4 @@
-import { MailOpen, MessageCircle, MessagesSquare } from "lucide-react";
+import { MessagesSquare } from "lucide-react";
 const Footer = () => {
   return (
     <div className="fixed absolute bottom-0 w-full">
