@@ -3,24 +3,22 @@ import Post from "../components/PostComponent";
 import { Plus } from "lucide-react";
 import PostCreationComponent from "../components/PostCreationComponent";
 
-export interface User {
-  id: number;
-  name: string;
-  surname: string;
-  avatarUrl: string;
-}
 export interface Post {
   id: number;
-  user: User;
+  user: {
+    id: Number;
+    username: string;
+    imgUrl: string;
+  };
   description: string;
   imgUrl?: string;
-  likes: User[];
+  likes: [];
   comments: Comment[];
-  date: Date;
+  date: string;
 }
 export interface Comment {
   id: number;
-  user: User;
+  user: {};
   comment: string;
 }
 
@@ -28,21 +26,17 @@ const Contents = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isPostCreationWindowOpen, setIsPostCreationWindowOpen] =
     useState(false);
-  const updateContents = () => {
+  useEffect(() => {
     fetch("http://localhost:3000/api/post")
-      .then((data) => data.json())
+      .then((response) => response.json())
       .then((data) => {
-        const sortedData = data.sort(
-          (a: Post, b: Post) =>
+        data.sort(
+          (a: any, b: any) =>
             new Date(b.date).getTime() - new Date(a.date).getTime()
         );
-        console.log(sortedData);
         setPosts(data);
       })
-      .then((error) => console.log(error));
-  };
-  useEffect(() => {
-    updateContents();
+      .catch((err) => console.error(err));
   }, []);
   return (
     <div className="pt-10 min-h-screen w-100 mx-auto">
@@ -58,8 +52,8 @@ const Contents = () => {
         </button>
       </div>
       <div>
-        {posts.map((post) => (
-          <Post post={post} />
+        {posts.map((post, key) => (
+          <Post key={key} post={post} />
         ))}
       </div>
       {isPostCreationWindowOpen && (

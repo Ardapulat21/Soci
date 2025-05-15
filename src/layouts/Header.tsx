@@ -11,7 +11,7 @@ const Header = () => {
           <p>SOCI</p>
         </div>
         <div className="flex flex-row space-x-4 italic items-center ">
-          <form className="flex px-2 w-40 border-1  border-gray-300 bg-white text-gray-600 rounded-lg transition-all duration-300 ">
+          <form className="flex px-2 w-40 border-1 border-gray-300 bg-white text-gray-600 rounded-lg transition-all duration-300 ">
             <input className="outline-none overflow-hidden max-w-30" />
             <Search
               className="text-gray-600"
@@ -26,7 +26,7 @@ const Header = () => {
           <div className="flex flex-col">
             <img
               className="object-cover rounded-full size-7"
-              src="Arda Pulat.jpeg"
+              src={`http://localhost:3000/${localStorage.getItem("imgUrl")}`}
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             />
             {isProfileOpen && (
@@ -34,7 +34,9 @@ const Header = () => {
                 <div className="flex flex-row justify-center items-center space-x-3 rounded-xl px-5 py-2 ">
                   <img
                     className="object-cover rounded-full size-10"
-                    src="Arda Pulat.jpeg"
+                    src={`http://localhost:3000/${localStorage.getItem(
+                      "imgUrl"
+                    )}`}
                   />
                   <div className="text-l font-semibold">Arda Pulat</div>
                 </div>

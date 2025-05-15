@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 type PostCreationComponentProps = {
   onClose: () => void;
 };
@@ -28,6 +28,9 @@ const PostCreationComponent = ({ onClose }: PostCreationComponentProps) => {
     if (file) formData.append("image", file);
     if (content) formData.append("description", content);
 
+    formData.append("id", `${localStorage.getItem("id")}`);
+    formData.append("username", `${localStorage.getItem("username")}`);
+    formData.append("imgUrl", `${localStorage.getItem("imgUrl")}`);
     formData.append("date", new Date().toString());
 
     fetch("http://localhost:3000/api/post", {
@@ -59,7 +62,9 @@ const PostCreationComponent = ({ onClose }: PostCreationComponentProps) => {
         >
           <div className="flex flex-row space-x-3">
             <div className="size-14">
-              <img src="Arda Pulat.jpeg" />
+              <img
+                src={`http://localhost:3000/${localStorage.getItem("imgUrl")}`}
+              />
             </div>
             <div className="w-full">
               <textarea
@@ -67,7 +72,9 @@ const PostCreationComponent = ({ onClose }: PostCreationComponentProps) => {
                 onChange={(e) => {
                   setContent(e.target.value);
                 }}
-                placeholder="Hey Arda What's up?"
+                placeholder={`Hey ${localStorage.getItem(
+                  "username"
+                )} What's up?`}
                 className="outline-0 w-full font-light text-gray-600 h-full"
               />
             </div>
@@ -80,6 +87,7 @@ const PostCreationComponent = ({ onClose }: PostCreationComponentProps) => {
               <input
                 type="file"
                 id="fileInput"
+                name="fileInput"
                 className="hidden"
                 accept="image/png, image/jpeg"
                 ref={fileInputRef}

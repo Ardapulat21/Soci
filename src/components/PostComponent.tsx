@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Post } from "../layouts/Contents";
 import { getDateDifference } from "../utils/utils";
 import { ThumbsUp, MessageCircle, Forward, SendHorizonal } from "lucide-react";
@@ -6,14 +6,43 @@ import CommentComponent from "./CommentComponent";
 interface PostProps {
   post: Post;
 }
-
 const PostComponent: React.FC<PostProps> = ({ post }) => {
   const [commentToBeAdded, SetCommentToBeAdded] = useState("");
+  const [isPostLiked, setIsPostLiked] = useState(false);
+  const [likes, setLikes] = useState<[]>(post.likes);
 
+  const data = {
+    postId: post.id,
+    username: localStorage.getItem("username"),
+  };
+
+  const checkIfPostLiked = () => {
+    const isLiked = post.likes.some(
+      (like) => like["username"] === data.username
+    );
+    setIsPostLiked(isLiked);
+  };
+  useEffect(() => {
+    checkIfPostLiked();
+  }, []);
+
+  const likePost = async () => {
+    await fetch("http://localhost:3000/api/post/like", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setIsPostLiked(!isPostLiked);
+        setLikes(response);
+      })
+      .catch((err) => console.error(err));
+  };
   const handleCommentSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (!commentToBeAdded) return;
-    alert(commentToBeAdded);
+
     SetCommentToBeAdded("");
   };
   return (
@@ -21,54 +50,60 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
       <div className="flex flex-row mb-2">
         <img
           className="size-12 object-cover rounded-full "
-          src={post.user.avatarUrl}
+          src={`http://localhost:3000/${post.user.imgUrl}`}
         />
         <div className="flex flex-row justify-between w-full text-l text-gray-700 font-medium ml-2">
-          <p>
-            {post.user.name} {post.user.surname}
-          </p>
-          <p className="text-sm font-light">
-            {getDateDifference(new Date(post.date))}
-          </p>
+          <p>{post.user.username}</p>
+          <p className="text-sm font-light">{getDateDifference(post.date)}</p>
         </div>
       </div>
       <div>
         <p className="text-left pb-2">{post.description}</p>
         {post.imgUrl && (
           <div>
-            <img className="max-h-200" src={post.imgUrl} />
+            <img
+              className="max-h-200"
+              src={`http://localhost:3000/${post.imgUrl}`}
+            />
             <div className="flex flex-row items-center mt-2 space-x-1 border-b-1 border-gray-300">
-              {post.likes.length > 0 && (
+              {likes.length > 0 && (
                 <div className="flex flex-row items-center space-x-1 text-gray-600">
                   <ThumbsUp className="size-7 p-1" />
-                  <p>{post.likes.length}</p>
+                  <p>{likes.length}</p>
                 </div>
               )}
-              {post.comments.length > 0 && (
-                <div className="flex flex-row items-center space-x-1 p-1 text-gray-600">
-                  <MessageCircle className="size-7 p-1" />
-                  <p>{post.comments.length}</p>
-                </div>
-              )}
+              <div className="h-7">
+                {post.comments.length > 0 && (
+                  <div className="flex flex-row items-center space-x-1 p-1 text-gray-600">
+                    <MessageCircle className="size-7 p-1" />
+                    <p>{post.comments.length}</p>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="flex flex-row space-x-3 mt-3 text-gray-500">
-              <div className="flex flex-row hover:cursor-pointer hover:text-blue-300 active:opacity-60 transition-colors duration-75 ">
+              <div
+                onClick={likePost}
+                className={`flex flex-row hover:cursor-pointer ${
+                  isPostLiked ? `text-blue-500` : ``
+                } hover:text-blue-300 active:opacity-60 transition-colors duration-75`}
+              >
                 <ThumbsUp />
-                <p className="pl-1 pt-0.5">Like</p>
+                <p className="pl-1 pt-0.5 select-none">Like</p>
               </div>
               <div className="flex flex-row hover:cursor-pointer hover:text-blue-300 active:opacity-60 transition-colors duration-75 ">
                 <MessageCircle />
-                <p className="pl-1 pt-0.5">Comment</p>
+                <p className="pl-1 pt-0.5 select-none">Comment</p>
               </div>
               <div className="flex flex-row hover:cursor-pointer hover:text-blue-300 active:opacity-60 transition-colors duration-75">
                 <Forward />
-                <p className="pl-1 pt-0.5">Share</p>
+                <p className="pl-1 pt-0.5 select-none">Share</p>
               </div>
             </div>
             <div className="flex flex-row pt-4">
               <img
                 className="size-10 object-cover rounded-full"
-                src={post.user.avatarUrl}
+                src={`http://localhost:3000/${localStorage.getItem("imgUrl")}`}
               />
               <form
                 onSubmit={handleCommentSubmit}
