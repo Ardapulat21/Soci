@@ -4,28 +4,34 @@ import { Plus } from "lucide-react";
 import PostCreationComponent from "../components/PostCreationComponent";
 
 export interface Post {
-  id: number;
-  user: {
-    id: Number;
-    username: string;
-    imgUrl: string;
-  };
+  _id: number;
+  user: User;
   description: string;
   imgUrl?: string;
   likes: [];
-  comments: Comment[];
+  comments: [];
   date: string;
 }
 export interface Comment {
-  id: number;
-  user: {};
+  _id: number;
+  user: User;
   comment: string;
 }
-
-const Contents = () => {
+export interface User {
+  _id: number;
+  username: string;
+  imgUrl: string;
+}
+const Contents: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isPostCreationWindowOpen, setIsPostCreationWindowOpen] =
     useState(false);
+
+  const updateContents = (newPosts: object) => {
+    console.log(`Contents page:${newPosts} ${newPosts}`);
+    // setPosts(newPosts);
+  };
+
   useEffect(() => {
     fetch("http://localhost:3000/api/post")
       .then((response) => response.json())
@@ -61,6 +67,7 @@ const Contents = () => {
           onClose={() => {
             setIsPostCreationWindowOpen(false);
           }}
+          updateContent={updateContents}
         />
       )}
     </div>

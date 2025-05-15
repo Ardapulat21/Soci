@@ -1,9 +1,13 @@
 import { useRef, useState } from "react";
 type PostCreationComponentProps = {
   onClose: () => void;
+  updateContent: (contents: object) => void;
 };
 
-const PostCreationComponent = ({ onClose }: PostCreationComponentProps) => {
+const PostCreationComponent = ({
+  onClose,
+  updateContent,
+}: PostCreationComponentProps) => {
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -37,9 +41,11 @@ const PostCreationComponent = ({ onClose }: PostCreationComponentProps) => {
       method: "POST",
       body: formData,
     })
-      .then((data) => data.json)
-      .then((data) => console.log(data))
-      .then((error) => console.error(error));
+      .then((response) => response.json)
+      .then((response) => {
+        updateContent(response);
+      })
+      .catch((error) => console.error(error));
 
     onClose();
   };

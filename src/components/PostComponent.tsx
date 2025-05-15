@@ -7,19 +7,18 @@ interface PostProps {
   post: Post;
 }
 const PostComponent: React.FC<PostProps> = ({ post }) => {
-  const [commentToBeAdded, SetCommentToBeAdded] = useState("");
+  const [commentToBeAdded, setCommentToBeAdded] = useState("");
   const [isPostLiked, setIsPostLiked] = useState(false);
   const [likes, setLikes] = useState<[]>(post.likes);
+  const [comments, setComments] = useState<[]>(post.comments);
 
   const data = {
-    postId: post.id,
-    username: localStorage.getItem("username"),
+    postId: post._id,
+    userId: localStorage.getItem("id"),
   };
 
   const checkIfPostLiked = () => {
-    const isLiked = post.likes.some(
-      (like) => like["username"] === data.username
-    );
+    const isLiked = post.likes.some((like) => like["_id"] == data.userId);
     setIsPostLiked(isLiked);
   };
   useEffect(() => {
@@ -39,11 +38,30 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
       })
       .catch((err) => console.error(err));
   };
+  const makeComment = async () => {
+    await fetch("http://localhost:3000/api/post/comment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        postId: data.postId,
+        userId: data.userId,
+        comment: commentToBeAdded,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setComments(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   const handleCommentSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (!commentToBeAdded) return;
 
-    SetCommentToBeAdded("");
+    makeComment();
+    setCommentToBeAdded("");
   };
   return (
     <div className="w-full border-1 border-gray-300 bg-white shadow p-4 mb-2">
@@ -59,76 +77,77 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
       </div>
       <div>
         <p className="text-left pb-2">{post.description}</p>
-        {post.imgUrl && (
-          <div>
+        <div>
+          {post.imgUrl && (
             <img
               className="max-h-200"
               src={`http://localhost:3000/${post.imgUrl}`}
             />
-            <div className="flex flex-row items-center mt-2 space-x-1 border-b-1 border-gray-300">
-              {likes.length > 0 && (
+          )}
+
+          <div className="flex flex-row items-center mt-1 space-x-1 border-b-1 border-gray-300">
+            {likes.length > 0 && (
+              <div className="flex flex-row items-center space-x-1 text-gray-600">
+                <ThumbsUp className="size-7 p-1" />
+                <p>{likes.length}</p>
+              </div>
+            )}
+            <div className="h-7">
+              {comments.length > 0 && (
                 <div className="flex flex-row items-center space-x-1 text-gray-600">
-                  <ThumbsUp className="size-7 p-1" />
-                  <p>{likes.length}</p>
+                  <MessageCircle className="size-7 p-1" />
+                  <p>{comments.length}</p>
                 </div>
               )}
-              <div className="h-7">
-                {post.comments.length > 0 && (
-                  <div className="flex flex-row items-center space-x-1 p-1 text-gray-600">
-                    <MessageCircle className="size-7 p-1" />
-                    <p>{post.comments.length}</p>
-                  </div>
-                )}
-              </div>
             </div>
-            <div className="flex flex-row space-x-3 mt-3 text-gray-500">
-              <div
-                onClick={likePost}
-                className={`flex flex-row hover:cursor-pointer ${
-                  isPostLiked ? `text-blue-500` : ``
-                } hover:text-blue-300 active:opacity-60 transition-colors duration-75`}
-              >
-                <ThumbsUp />
-                <p className="pl-1 pt-0.5 select-none">Like</p>
-              </div>
-              <div className="flex flex-row hover:cursor-pointer hover:text-blue-300 active:opacity-60 transition-colors duration-75 ">
-                <MessageCircle />
-                <p className="pl-1 pt-0.5 select-none">Comment</p>
-              </div>
-              <div className="flex flex-row hover:cursor-pointer hover:text-blue-300 active:opacity-60 transition-colors duration-75">
-                <Forward />
-                <p className="pl-1 pt-0.5 select-none">Share</p>
-              </div>
-            </div>
-            <div className="flex flex-row pt-4">
-              <img
-                className="size-10 object-cover rounded-full"
-                src={`http://localhost:3000/${localStorage.getItem("imgUrl")}`}
-              />
-              <form
-                onSubmit={handleCommentSubmit}
-                className="flex items-center w-full border border-gray-400 rounded-3xl ml-1 text-left pl-3"
-              >
-                <input
-                  type="text"
-                  value={commentToBeAdded}
-                  onChange={(e) => SetCommentToBeAdded(e.target.value)}
-                  placeholder="Comment here"
-                  className="text-left flex-1 outline-none"
-                />
-                <button
-                  type="submit"
-                  className="mr-1 text-gray-500 hover:bg-blue-200 rounded-full p-1 transition-all duration-75"
-                >
-                  <SendHorizonal />
-                </button>
-              </form>
-            </div>
-            {post.comments.map((comment) => (
-              <CommentComponent comment={comment} />
-            ))}
           </div>
-        )}
+          <div className="flex flex-row space-x-3 mt-3 text-gray-500">
+            <div
+              onClick={likePost}
+              className={`flex flex-row hover:cursor-pointer ${
+                isPostLiked ? `text-blue-500` : ``
+              } hover:text-blue-300 active:opacity-60 transition-colors duration-75`}
+            >
+              <ThumbsUp />
+              <p className="pl-1 pt-0.5 select-none">Like</p>
+            </div>
+            <div className="flex flex-row hover:cursor-pointer hover:text-blue-300 active:opacity-60 transition-colors duration-75 ">
+              <MessageCircle />
+              <p className="pl-1 pt-0.5 select-none">Comment</p>
+            </div>
+            <div className="flex flex-row hover:cursor-pointer hover:text-blue-300 active:opacity-60 transition-colors duration-75">
+              <Forward />
+              <p className="pl-1 pt-0.5 select-none">Share</p>
+            </div>
+          </div>
+          <div className="flex flex-row pt-4">
+            <img
+              className="size-10 object-cover rounded-full"
+              src={`http://localhost:3000/${localStorage.getItem("imgUrl")}`}
+            />
+            <form
+              onSubmit={handleCommentSubmit}
+              className="flex items-center w-full border border-gray-400 rounded-3xl ml-1 text-left pl-3"
+            >
+              <input
+                type="text"
+                value={commentToBeAdded}
+                onChange={(e) => setCommentToBeAdded(e.target.value)}
+                placeholder="Comment here"
+                className="text-left flex-1 outline-none"
+              />
+              <button
+                type="submit"
+                className="mr-1 text-gray-500 hover:bg-blue-200 rounded-full p-1 transition-all duration-75"
+              >
+                <SendHorizonal />
+              </button>
+            </form>
+          </div>
+          {post.comments.map((comment, key) => (
+            <CommentComponent key={key} comment={comment} />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     })
       .then((response) => response.json())
       .then((response) => {
-        localStorage.setItem("id", response.id);
+        localStorage.setItem("id", response._id);
         localStorage.setItem("username", response.username);
         localStorage.setItem("imgUrl", response.imgUrl);
         navigate("/Home");
