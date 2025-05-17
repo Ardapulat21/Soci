@@ -12,6 +12,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
   const [likes, setLikes] = useState<[]>(post.likes);
   const [comments, setComments] = useState<[]>(post.comments);
 
+  const userData = JSON.parse(localStorage.getItem("user") ?? "");
   const data = {
     postId: post._id,
     userId: localStorage.getItem("id"),
@@ -123,7 +124,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
           <div className="flex flex-row pt-4">
             <img
               className="size-10 object-cover rounded-full"
-              src={`http://localhost:3000/${localStorage.getItem("imgUrl")}`}
+              src={`http://localhost:3000/${userData.imgUrl}`}
             />
             <form
               onSubmit={handleCommentSubmit}

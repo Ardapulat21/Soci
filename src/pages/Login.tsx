@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 const Login: React.FC = () => {
+  const { login } = useAuth();
+
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +18,6 @@ const Login: React.FC = () => {
       console.log("Password is not same.");
       return;
     }
-
     const credentials = {
       username,
       password,
@@ -28,11 +30,25 @@ const Login: React.FC = () => {
       },
       body: JSON.stringify(credentials),
     })
-      .then((response) => response.json())
       .then((response) => {
-        localStorage.setItem("id", response._id);
-        localStorage.setItem("username", response.username);
-        localStorage.setItem("imgUrl", response.imgUrl);
+        if (!response.ok) {
+          throw new Error(
+            "Network response was not ok: " + response.statusText
+          );
+        }
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        const userData = {
+          token: response.token,
+          user: {
+            _id: response.id,
+            username: response.username,
+            imgUrl: response.imgUrl,
+          },
+        };
+        login(userData);
         navigate("/Home");
       })
       .catch((error) => console.error(error));
