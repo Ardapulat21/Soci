@@ -22,14 +22,15 @@ export interface User {
   username: string;
   imgUrl: string;
 }
+
 const Contents: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isPostCreationWindowOpen, setIsPostCreationWindowOpen] =
     useState(false);
 
-  const updateContents = (newPosts: object) => {
-    console.log(`Contents page:${newPosts} ${newPosts}`);
-    // setPosts(newPosts);
+  const updateContents = (newPost: Post) => {
+    const updatedPost = [newPost, ...posts];
+    setPosts(updatedPost);
   };
 
   useEffect(() => {

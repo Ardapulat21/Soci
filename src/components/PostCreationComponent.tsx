@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
+import type { Post } from "../layouts/Contents";
 type PostCreationComponentProps = {
   onClose: () => void;
-  updateContent: (contents: object) => void;
+  updateContent: (contents: Post) => void;
 };
 
 const PostCreationComponent = ({
@@ -41,8 +42,9 @@ const PostCreationComponent = ({
       method: "POST",
       body: formData,
     })
-      .then((response) => response.json)
+      .then((response) => response.json())
       .then((response) => {
+        console.log(`new post added:`, response);
         updateContent(response);
       })
       .catch((error) => console.error(error));

@@ -144,9 +144,12 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
               </button>
             </form>
           </div>
-          {post.comments.map((comment, key) => (
-            <CommentComponent key={key} comment={comment} />
-          ))}
+          {comments
+            .slice()
+            .reverse()
+            .map((comment, key) => (
+              <CommentComponent key={key} comment={comment} />
+            ))}
         </div>
       </div>
     </div>
