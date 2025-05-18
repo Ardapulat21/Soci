@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import type { Post } from "../layouts/Contents";
+import type { Post } from "../pages/HomePage";
 import { getDateDifference } from "../utils/utils";
 import { ThumbsUp, MessageCircle, Forward, SendHorizonal } from "lucide-react";
 import CommentComponent from "./CommentComponent";
+import { useAuth } from "../context/AuthProvider";
 interface PostProps {
   post: Post;
 }
@@ -12,10 +13,11 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
   const [likes, setLikes] = useState<[]>(post.likes);
   const [comments, setComments] = useState<[]>(post.comments);
 
-  const userData = JSON.parse(localStorage.getItem("user") ?? "");
+  const { token, currentUser } = useAuth();
+
   const data = {
     postId: post._id,
-    userId: localStorage.getItem("id"),
+    userId: currentUser?._id,
   };
 
   const checkIfPostLiked = () => {
@@ -29,7 +31,10 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
   const likePost = async () => {
     await fetch("http://localhost:3000/api/post/like", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
@@ -42,7 +47,10 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
   const makeComment = async () => {
     await fetch("http://localhost:3000/api/post/comment", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         postId: data.postId,
         userId: data.userId,
@@ -124,7 +132,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
           <div className="flex flex-row pt-4">
             <img
               className="size-10 object-cover rounded-full"
-              src={`http://localhost:3000/${userData.imgUrl}`}
+              src={`http://localhost:3000/${currentUser?.imgUrl}`}
             />
             <form
               onSubmit={handleCommentSubmit}

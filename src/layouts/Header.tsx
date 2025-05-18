@@ -3,9 +3,8 @@ import { Search } from "lucide-react";
 import { useAuth } from "../context/AuthProvider";
 
 const Header = () => {
-  const { logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const userData = JSON.parse(localStorage.getItem("user") ?? "");
 
   return (
     <div className="fixed w-full">
@@ -29,7 +28,7 @@ const Header = () => {
           <div className="flex flex-col">
             <img
               className="object-cover rounded-full size-7"
-              src={`http://localhost:3000/${userData.imgUrl}`}
+              src={`http://localhost:3000/${currentUser?.imgUrl}`}
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             />
             {isProfileOpen && (
@@ -37,7 +36,7 @@ const Header = () => {
                 <div className="flex flex-row justify-center items-center space-x-3 rounded-xl px-5 py-2 ">
                   <img
                     className="object-cover rounded-full size-10"
-                    src={`http://localhost:3000/${userData.imgUrl}`}
+                    src={`http://localhost:3000/${currentUser?.imgUrl}`}
                   />
                   <div className="text-l font-semibold">Arda Pulat</div>
                 </div>

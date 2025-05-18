@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthProvider";
 const Login: React.FC = () => {
   const { login } = useAuth();
 
+  const [status, setStatus] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -32,20 +33,19 @@ const Login: React.FC = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error(
-            "Network response was not ok: " + response.statusText
-          );
+          setStatus("User credentials are not valid.");
+          throw new Error("Authentication is failed " + response.statusText);
         }
         return response.json();
       })
       .then((response) => {
-        console.log(response);
+        setStatus("");
         const userData = {
           token: response.token,
           user: {
-            _id: response.id,
-            username: response.username,
-            imgUrl: response.imgUrl,
+            _id: response.sessionInfo._id,
+            username: response.sessionInfo.username,
+            imgUrl: response.sessionInfo.imgUrl,
           },
         };
         login(userData);
@@ -55,14 +55,14 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="h-screen py-30 bg-linear-to-r/decreasing from-indigo-200">
-      <div className="flex flex-row justify-center p-4 space-x-4 text-gray-600 font-light h-full ">
-        <div className="flex justify-center items-center w-85 rounded-l bg-linear-to-r/decreasing from-indigo-300 to-teal-100">
-          <div className="absolute top-22 size-24 rounded-full bg-conic-180 from-pink-600 via-indigo-50 to-pink-600"></div>
+    <div className="h-screen py-10 text-gray-500 ">
+      <div className="flex flex-row justify-center p-4 space-x-4 font-light h-full ">
+        <div className="flex justify-center items-center w-85 rounded-l bg-linear-to-r/decreasing from-pink-300 to-blue-100">
+          <div className="absolute top-2 size-24 rounded-full bg-conic-180 from-pink-600 via-indigo-50 to-pink-600"></div>
           <p>Hey its soci! your social platform</p>
         </div>
-        <div className="flex flex-col justify-center items-center w-85 h-full text-gray-500 rounded-l bg-linear-to-r/increasing from-teal-100 to-indigo-300">
-          <div className="absolute top-22 size-24 rounded-full bg-conic-180 from-indigo-600 via-indigo-50 to-indigo-600"></div>
+        <div className="flex flex-col justify-center items-center w-85 h-full rounded-l bg-linear-to-r/increasing from-blue-100 to-indigo-300">
+          <div className="absolute top-2 size-24 rounded-full bg-conic-180 from-indigo-600 via-indigo-50 to-indigo-600"></div>
           {isLogin ? (
             <form
               onSubmit={(e) => handleAuth(e, "login")}
@@ -150,6 +150,7 @@ const Login: React.FC = () => {
               </p>
             </form>
           )}
+          <p className="mt-10 text-red-400">{status}</p>
         </div>
       </div>
     </div>

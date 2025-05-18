@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
-import type { Post } from "../layouts/Contents";
+import type { Post } from "../pages/HomePage";
+import { useAuth } from "../context/AuthProvider";
 type PostCreationComponentProps = {
   onClose: () => void;
   updateContent: (contents: Post) => void;
@@ -9,10 +10,12 @@ const PostCreationComponent = ({
   onClose,
   updateContent,
 }: PostCreationComponentProps) => {
+  const { currentUser } = useAuth();
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const { token } = useAuth();
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
@@ -40,11 +43,13 @@ const PostCreationComponent = ({
 
     fetch("http://localhost:3000/api/post", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log(`new post added:`, response);
         updateContent(response);
       })
       .catch((error) => console.error(error));
@@ -70,9 +75,7 @@ const PostCreationComponent = ({
         >
           <div className="flex flex-row space-x-3">
             <div className="size-14">
-              <img
-                src={`http://localhost:3000/${localStorage.getItem("imgUrl")}`}
-              />
+              <img src={`http://localhost:3000/${currentUser?.imgUrl}`} />
             </div>
             <div className="w-full">
               <textarea
@@ -80,9 +83,7 @@ const PostCreationComponent = ({
                 onChange={(e) => {
                   setContent(e.target.value);
                 }}
-                placeholder={`Hey ${localStorage.getItem(
-                  "username"
-                )} What's up?`}
+                placeholder={`Hey ${currentUser?.username} What's up?`}
                 className="outline-0 w-full font-light text-gray-600 h-full"
               />
             </div>
