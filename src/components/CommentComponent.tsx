@@ -1,4 +1,4 @@
-import type { Comment } from "../layouts/Contents";
+import type { Comment } from "../pages/HomePage";
 
 interface CommentProps {
   comment: Comment;

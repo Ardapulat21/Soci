@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import type { User } from "../layouts/Contents";
+import type { User } from "../pages/HomePage";
 
 interface AuthContextType {
   token: string | null;

@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotFound from "./pages/NotFound";
-import Home from "./pages/Home";
+import HomeLayout from "./layouts/HomeLayout";
 import Login from "./pages/Login";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthProvider";
@@ -23,7 +23,7 @@ function App() {
             path="/Home"
             element={
               <ProtectedRoute>
-                <Home />
+                <HomeLayout />
               </ProtectedRoute>
             }
           />

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Post from "../components/PostComponent";
 import { Plus } from "lucide-react";
 import PostCreationComponent from "../components/PostCreationComponent";
+import { useAuth } from "../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export interface Post {
   _id: number;
@@ -23,7 +25,9 @@ export interface User {
   imgUrl: string;
 }
 
-const Contents: React.FC = () => {
+const HomePage: React.FC = () => {
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
   const [isPostCreationWindowOpen, setIsPostCreationWindowOpen] =
     useState(false);
@@ -34,8 +38,20 @@ const Contents: React.FC = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/post")
-      .then((response) => response.json())
+    fetch("http://localhost:3000/api/post", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          logout();
+          navigate("/");
+          throw new Error("Authentication is failed " + response.statusText);
+        }
+        return response.json();
+      })
       .then((data) => {
         data.sort(
           (a: any, b: any) =>
@@ -74,4 +90,4 @@ const Contents: React.FC = () => {
     </div>
   );
 };
-export default Contents;
+export default HomePage;
