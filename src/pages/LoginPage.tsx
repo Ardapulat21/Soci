@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
           },
         };
         login(userData);
-        navigate("/Home");
+        navigate("/");
       })
       .catch((error) => console.error(error));
   };
