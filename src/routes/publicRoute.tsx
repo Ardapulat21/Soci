@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthProvider";
 const PublicRoute: React.FC<PropsWithChildren> = ({ children }) => {
   const { currentUser } = useAuth();
 
-  return currentUser ? <Navigate to="/home" /> : children;
+  return currentUser ? <Navigate to="/" /> : children;
 };
 
 export default PublicRoute;

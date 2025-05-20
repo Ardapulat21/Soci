@@ -36,9 +36,9 @@ const PostCreationComponent = ({
     if (file) formData.append("image", file);
     if (content) formData.append("description", content);
 
-    formData.append("id", `${localStorage.getItem("id")}`);
-    formData.append("username", `${localStorage.getItem("username")}`);
-    formData.append("imgUrl", `${localStorage.getItem("imgUrl")}`);
+    formData.append("id", `${currentUser?._id}`);
+    formData.append("username", `${currentUser?.username}`);
+    formData.append("imgUrl", `${currentUser?.imgUrl}`);
     formData.append("date", new Date().toString());
 
     fetch("http://localhost:3000/api/post", {
@@ -48,7 +48,12 @@ const PostCreationComponent = ({
       },
       body: formData,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("error");
+        }
+        return response.json();
+      })
       .then((response) => {
         updateContent(response);
       })

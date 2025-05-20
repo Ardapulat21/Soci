@@ -2,31 +2,36 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotFound from "./pages/NotFound";
 import HomeLayout from "./layouts/HomeLayout";
-import Login from "./pages/Login";
+import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthProvider";
 import PublicRoute from "./routes/publicRoute";
+import HomePage from "./pages/HomePage";
+import FriendsPage from "./pages/FriendsPage";
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route
-            path="/"
+            path="/auth"
             element={
               <PublicRoute>
-                <Login />
+                <LoginPage />
               </PublicRoute>
             }
           />
           <Route
-            path="/Home"
+            path="/"
             element={
               <ProtectedRoute>
                 <HomeLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<HomePage />}></Route>
+            <Route path="/Friends" element={<FriendsPage />}></Route>
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

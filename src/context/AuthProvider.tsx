@@ -13,7 +13,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -23,8 +22,6 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
       setToken(storedToken);
       setCurrentUser(JSON.parse(storedUser));
     }
-
-    setLoading(false); // Done loading from localStorage
   }, []);
 
   const login = (data: any) => {
@@ -43,7 +40,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ token, currentUser, login, logout }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

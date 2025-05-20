@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
       .then((response) => {
         if (!response.ok) {
           logout();
-          navigate("/");
+          navigate("/auth");
           throw new Error("Authentication is failed " + response.statusText);
         }
         return response.json();

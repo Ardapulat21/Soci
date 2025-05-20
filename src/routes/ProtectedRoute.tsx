@@ -7,7 +7,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
 }: ProtectedRouteProps) => {
   const { currentUser } = useAuth();
-  return currentUser ? children : <Navigate to="/" />;
+  return currentUser ? children : <Navigate to="/auth" />;
 };
 
 export default ProtectedRoute;

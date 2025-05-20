@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
   const { login } = useAuth();
 
   const [status, setStatus] = useState("");
@@ -156,4 +156,4 @@ const Login: React.FC = () => {
     </div>
   );
 };
-export default Login;
+export default LoginPage;

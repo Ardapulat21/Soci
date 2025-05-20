@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { useAuth } from "../context/AuthProvider";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { currentUser, logout } = useAuth();
@@ -15,16 +16,21 @@ const Header = () => {
         <div className="flex flex-row space-x-4 italic items-center ">
           <form className="flex px-2 w-40 border-1 border-gray-300 bg-white text-gray-600 rounded-lg transition-all duration-300 ">
             <input className="outline-none overflow-hidden max-w-30" />
-            <Search
-              className="text-gray-600"
-              onClick={() => {
-                alert("heh");
-              }}
-            />
+            <Search className="text-gray-600" />
           </form>
-          <button className="hover:text-blue-300 rounded-full">Home</button>
-          <button className="hover:text-blue-300 rounded-full">Friends</button>
-          <button className="hover:text-blue-300 rounded-full">Explore</button>
+          <nav>
+            <ul className="flex flex-row space-x-2">
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/Explore">Explore</Link>
+              </li>
+              <li>
+                <Link to="/Friends">Friends</Link>
+              </li>
+            </ul>
+          </nav>
           <div className="flex flex-col">
             <img
               className="object-cover rounded-full size-7"
