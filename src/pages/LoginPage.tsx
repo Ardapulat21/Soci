@@ -12,10 +12,10 @@ const LoginPage: React.FC = () => {
   const [verificationPassword, setVerificationPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleAuth = (e: React.FormEvent, type: "login" | "register") => {
+  const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (type === "register" && password !== verificationPassword) {
+    if (isLogin === false && password !== verificationPassword) {
       console.log("Password is not same.");
       return;
     }
@@ -24,31 +24,35 @@ const LoginPage: React.FC = () => {
       password,
     };
 
-    fetch(`http://localhost:3000/api/auth/${type}`, {
+    fetch(`http://localhost:3000/api/auth/${isLogin ? "login" : "register"}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(credentials),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
-          setStatus("User credentials are not valid.");
-          throw new Error("Authentication is failed " + response.statusText);
+          const err = await response.json();
+          setStatus(err.message);
+          throw new Error("Authentication is failed " + err.message);
         }
-        return response.json();
+        return await response.json();
       })
       .then((response) => {
         setStatus("");
-        const userData = {
+        if (!isLogin) {
+          navigate("/auth");
+          return;
+        }
+        login({
           token: response.token,
           user: {
             _id: response.sessionInfo._id,
             username: response.sessionInfo.username,
             imgUrl: response.sessionInfo.imgUrl,
           },
-        };
-        login(userData);
+        });
         navigate("/");
       })
       .catch((error) => console.error(error));
@@ -65,7 +69,7 @@ const LoginPage: React.FC = () => {
           <div className="absolute top-2 size-24 rounded-full bg-conic-180 from-indigo-600 via-indigo-50 to-indigo-600"></div>
           {isLogin ? (
             <form
-              onSubmit={(e) => handleAuth(e, "login")}
+              onSubmit={handleAuth}
               className="space-y-3 w-80"
               method="post"
             >
@@ -104,7 +108,7 @@ const LoginPage: React.FC = () => {
             </form>
           ) : (
             <form
-              onSubmit={(e) => handleAuth(e, "register")}
+              onSubmit={handleAuth}
               className="space-y-3 w-80"
               method="post"
             >
