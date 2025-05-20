@@ -40,8 +40,9 @@ const LoginPage: React.FC = () => {
         return await response.json();
       })
       .then((response) => {
-        setStatus("");
+        setStatus(response.message);
         if (!isLogin) {
+          setIsLogin(!isLogin);
           navigate("/auth");
           return;
         }
