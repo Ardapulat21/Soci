@@ -6,7 +6,7 @@ import FriendComponent from "../components/FriendComponent";
 
 const FriendsPage: React.FC = () => {
   const { token, currentUser } = useAuth();
-  const [allFriends, setAllFriends] = useState<User[]>([]);
+  const [nonFriends, setNonFriends] = useState<User[]>([]);
   const [friends, setFriends] = useState<User[]>([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +33,7 @@ const FriendsPage: React.FC = () => {
         const nonFriends = allUsers.filter(
           (user: User) => !myFriendIds.has(user._id)
         );
-        setAllFriends(nonFriends);
+        setNonFriends(nonFriends);
         setFriends(friendsData);
       } catch (error) {
         console.error(error);
@@ -41,11 +41,8 @@ const FriendsPage: React.FC = () => {
     };
 
     fetchData();
-  }, [token, setAllFriends, setFriends]);
+  }, [token, setNonFriends, setFriends]);
 
-  const navigateToProfile = () => {
-    alert("navigating to users profile");
-  };
   return (
     <div className="pt-10 h-screen font-light flex flex-col items-center select-none">
       <div className="flex flex-row space-x-10">
@@ -66,7 +63,7 @@ const FriendsPage: React.FC = () => {
             <p className="text-sm">All Friends</p>
           </div>
           <div className="flex flex-col justify-center items-center ">
-            {allFriends
+            {nonFriends
               .filter((friend) => friend._id !== currentUser?._id)
               .map((profile) => (
                 <FriendComponent

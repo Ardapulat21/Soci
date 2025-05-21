@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 interface NotificationTabProps {
   user: User | null;
-  text: string;
+  text?: string;
   isFriendshipInvite?: boolean;
   onClose: () => void;
 }
@@ -41,7 +41,11 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
               className="rounded-full size-10"
               src={`http://localhost:3000/${user?.imgUrl}`}
             />
-            <p>{text}</p>
+            <p>
+              {isFriendshipInvite
+                ? `${user?.username} wants to be friend with you.`
+                : text}
+            </p>
           </div>
           {isFriendshipInvite && (
             <div className="flex flex-row space-x-2">
