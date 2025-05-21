@@ -2,34 +2,46 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
 import type { User } from "./HomePage";
 import { UserPlus, Users } from "lucide-react";
+import FriendComponent from "../components/FriendComponent";
 
 const FriendsPage: React.FC = () => {
   const { token, currentUser } = useAuth();
   const [allFriends, setAllFriends] = useState<User[]>([]);
   const [friends, setFriends] = useState<User[]>([]);
   useEffect(() => {
-    fetch("http://localhost:3000/api/user", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        setAllFriends(response);
-      });
-    fetch("http://localhost:3000/api/user/fetchFriends", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        setFriends(response);
-      })
-      .catch((err) => {
-        console.error(err.message);
-      });
-  }, []);
+    const fetchData = async () => {
+      try {
+        const [userResponse, friendsResponse] = await Promise.all([
+          fetch("http://localhost:3000/api/user", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+          fetch("http://localhost:3000/api/user/fetchFriends", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ]);
+
+        const allUsers = await userResponse.json();
+        const friendsData = await friendsResponse.json();
+
+        const myFriendIds = new Set(
+          friendsData.map((friend: User) => friend._id)
+        );
+        const nonFriends = allUsers.filter(
+          (user: User) => !myFriendIds.has(user._id)
+        );
+        setAllFriends(nonFriends);
+        setFriends(friendsData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [token, setAllFriends, setFriends]);
 
   const navigateToProfile = () => {
     alert("navigating to users profile");
@@ -43,34 +55,8 @@ const FriendsPage: React.FC = () => {
             <p className="text-left text-sm">Your Friends</p>
           </div>
           <div className="flex flex-col justify-center items-center min-w-60">
-            {friends.map((profile, key) => (
-              <div
-                key={key}
-                className="flex flex-row items-center justify-between px-4 py-2 border-b border-gray-100 bg-white hover:bg-gray-100"
-              >
-                <div className="flex flex-row justify-center space-x-2 items-center">
-                  <img
-                    className="rounded-full size-12 "
-                    src={`http://localhost:3000/${profile.imgUrl}`}
-                  />
-                  <p
-                    className="font-light hover:cursor-pointer"
-                    onClick={() => {
-                      navigateToProfile();
-                    }}
-                  >
-                    {profile.username}
-                  </p>
-                </div>
-                <div className="pl-45 ">
-                  <UserPlus
-                    className="p-1 mx-auto hover:cursor-pointer hover:bg-gray-300 rounded-full"
-                    onClick={() => {
-                      alert("Frinds added");
-                    }}
-                  />
-                </div>
-              </div>
+            {friends.map((profile) => (
+              <FriendComponent profile={profile} />
             ))}
           </div>
         </div>
@@ -83,30 +69,14 @@ const FriendsPage: React.FC = () => {
             {allFriends
               .filter((friend) => friend._id !== currentUser?._id)
               .map((profile) => (
-                <div className="flex flex-row items-center justify-between px-4 py-2 border-b border-gray-100 bg-white hover:bg-gray-100 w-100">
-                  <div className="flex flex-row justify-center space-x-2 items-center">
-                    <img
-                      className="rounded-full size-12 "
-                      src={`http://localhost:3000/${profile.imgUrl}`}
-                    />
-                    <p
-                      className="font-light hover:cursor-pointer"
-                      onClick={() => {
-                        navigateToProfile();
-                      }}
-                    >
-                      {profile.username}
-                    </p>
-                  </div>
-                  <div className="pl-45 ">
-                    <UserPlus
-                      className="p-1 mx-auto hover:cursor-pointer hover:bg-gray-300 rounded-full"
-                      onClick={() => {
-                        alert("Frinds added");
-                      }}
-                    />
-                  </div>
-                </div>
+                <FriendComponent
+                  profile={profile}
+                  isInvited={
+                    !!profile.pendingRequests?.some(
+                      (req) => req._id == currentUser?._id
+                    )
+                  }
+                />
               ))}
           </div>
         </div>

@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 export interface Post {
-  _id: number;
+  _id: string;
   user: User;
   description: string;
   imgUrl?: string;
@@ -15,14 +15,23 @@ export interface Post {
   date: string;
 }
 export interface Comment {
-  _id: number;
+  _id: string;
   user: User;
   comment: string;
 }
 export interface User {
-  _id: number;
+  _id: string;
   username: string;
   imgUrl: string;
+  friends?: User[];
+  pendingRequests?: User[];
+  invitedUsers?: User[];
+  notifications?: [
+    {
+      user: User;
+      notification: string;
+    }
+  ];
 }
 
 const HomePage: React.FC = () => {

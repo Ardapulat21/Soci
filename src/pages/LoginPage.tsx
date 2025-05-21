@@ -19,17 +19,16 @@ const LoginPage: React.FC = () => {
       console.log("Password is not same.");
       return;
     }
-    const credentials = {
-      username,
-      password,
-    };
 
     fetch(`http://localhost:3000/api/auth/${isLogin ? "login" : "register"}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(credentials),
+      body: JSON.stringify({
+        username,
+        password,
+      }),
     })
       .then(async (response) => {
         if (!response.ok) {
