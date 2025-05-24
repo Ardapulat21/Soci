@@ -4,18 +4,16 @@ import { Link } from "react-router-dom";
 import NotificationTab from "../components/NotificationTab";
 import ProfileTab from "../components/ProfileTab";
 import { useEffect, useState } from "react";
-import type { User } from "../pages/HomePage";
-interface NotificationProps {
-  requests: User[];
-  notifications: User[];
-}
 
+export interface NotificationProps {
+  requests: any[];
+  notifications: any[];
+}
 const Header = () => {
   const [isProfileTabOpen, setIsProfileTabOpen] = useState(false);
   const [isNotificationTabOpen, setIsNotificationTabOpen] = useState(false);
   const { token, currentUser } = useAuth();
   const [notifications, setNotifications] = useState<NotificationProps>();
-
   useEffect(() => {
     fetch("http://localhost:3000/api/user/fetchUserById", {
       method: "POST",
@@ -29,11 +27,10 @@ const Header = () => {
     })
       .then((response) => response.json())
       .then((response) => {
-        const allNotifications: NotificationProps = {
+        setNotifications({
           requests: response.pendingRequests,
           notifications: response.notifications,
-        };
-        setNotifications(allNotifications);
+        });
       });
   }, []);
   return (
@@ -67,16 +64,12 @@ const Header = () => {
               className="p-1 size-7 text-gray-600 font-light rounded-full hover:bg-blue-300 hover:text-white hover:cursor-pointer"
               onClick={() => setIsNotificationTabOpen(!isNotificationTabOpen)}
             />
-            {isNotificationTabOpen &&
-              notifications?.requests.map((notification) => {
-                return (
-                  <NotificationTab
-                    user={notification}
-                    isFriendshipInvite={true}
-                    onClose={() => setIsNotificationTabOpen(false)}
-                  />
-                );
-              })}
+            {isNotificationTabOpen && (
+              <NotificationTab
+                notifications={notifications}
+                onClose={() => setIsNotificationTabOpen(false)}
+              />
+            )}
           </div>
           <div>
             <img
