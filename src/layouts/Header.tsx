@@ -71,7 +71,9 @@ const Header = () => {
             {isNotificationTabOpen && (
               <NotificationTab
                 requests={requests}
+                setRequest={setRequests}
                 notifications={notifications}
+                setNotifications={setNotifications}
                 onClose={() => setIsNotificationTabOpen(false)}
               />
             )}

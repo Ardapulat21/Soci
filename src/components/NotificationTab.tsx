@@ -5,19 +5,19 @@ import { useAuth } from "../context/AuthProvider";
 interface NotificationTabProps {
   notifications?: any[];
   requests?: any[];
+  setRequest: (params: any[]) => void;
+  setNotifications: (params: any[]) => void;
   onClose: () => void;
 }
 const NotificationTab: React.FC<NotificationTabProps> = ({
   notifications,
+  setNotifications,
   requests,
+  setRequest,
   onClose,
 }) => {
-  const [requestState, setRequestState] = useState<any[]>(requests ?? []);
-  const [notificationState, setNotificationState] = useState<any[]>(
-    notifications ?? []
-  );
   const [isRequestTabOpen, setIsRequestTabOpen] = useState(
-    requestState.length > notificationState.length ? true : false
+    (requests ?? []).length > (notifications ?? []).length ? true : false
   );
   const popupRef = useRef<HTMLDivElement>(null);
   const { token } = useAuth();
@@ -34,7 +34,7 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
     })
       .then((response) => response.json())
       .then((response) => {
-        setRequestState(response);
+        setRequest(response);
       });
   };
   const declineInvite = (userId: string) => {
@@ -50,7 +50,7 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
     })
       .then((response) => response.json())
       .then((response) => {
-        setRequestState(response);
+        setNotifications(response);
       });
   };
   useEffect(() => {
@@ -78,8 +78,8 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
         </p>
 
         {isRequestTabOpen ? (
-          requestState.length > 0 ? (
-            requestState.map((user) => (
+          (requests ?? []).length > 0 ? (
+            requests?.map((user) => (
               <Notification
                 user={user}
                 isRequest={true}
@@ -90,8 +90,8 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
           ) : (
             <p className="text-left pl-3">There is no request</p>
           )
-        ) : notificationState.length > 0 ? (
-          notificationState.map((not) => (
+        ) : (notifications ?? []).length > 0 ? (
+          notifications?.map((not) => (
             <Notification
               user={not.user}
               notificationType={not.notificationType}
