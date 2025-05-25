@@ -59,14 +59,18 @@ const Header = () => {
             <input className="outline-none overflow-hidden max-w-30" />
             <Search className="text-gray-600" />
           </form>
-          <div>
+          <div className="relative">
             <Bell
               className="p-1 size-7 text-gray-600 font-light rounded-full hover:bg-blue-300 hover:text-white hover:cursor-pointer"
               onClick={() => setIsNotificationTabOpen(!isNotificationTabOpen)}
-            />
+            ></Bell>
+            {(notifications?.notifications ?? []).length > 0 ||
+              ((notifications?.requests ?? []).length > 0 && (
+                <span className="absolute top-0 right-0.5 h-3 w-3 rounded-full bg-red-500 border-2 border-white" />
+              ))}
             {isNotificationTabOpen && (
               <NotificationTab
-                notifications={notifications}
+                allNotifications={notifications}
                 onClose={() => setIsNotificationTabOpen(false)}
               />
             )}

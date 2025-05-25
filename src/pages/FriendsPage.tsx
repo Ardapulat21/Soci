@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
 import type { User } from "./HomePage";
-import { UserPlus, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import FriendComponent from "../components/FriendComponent";
 
 const FriendsPage: React.FC = () => {
@@ -53,7 +53,7 @@ const FriendsPage: React.FC = () => {
           </div>
           <div className="flex flex-col justify-center items-center min-w-60">
             {friends.map((profile) => (
-              <FriendComponent profile={profile} />
+              <FriendComponent profile={profile} isFriend={true} />
             ))}
           </div>
         </div>
@@ -68,6 +68,7 @@ const FriendsPage: React.FC = () => {
               .map((profile) => (
                 <FriendComponent
                   profile={profile}
+                  isFriend={false}
                   isInvited={
                     !!profile.pendingRequests?.some(
                       (req) => req._id == currentUser?._id

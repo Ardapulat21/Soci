@@ -1,17 +1,58 @@
 import type { NotificationProps } from "../layouts/Header";
 import { useEffect, useRef, useState } from "react";
 import Notification from "./Notification";
+import { useAuth } from "../context/AuthProvider";
 interface NotificationTabProps {
-  notifications?: NotificationProps;
+  allNotifications?: NotificationProps;
   onClose: () => void;
 }
 const NotificationTab: React.FC<NotificationTabProps> = ({
-  notifications,
+  allNotifications,
   onClose,
 }) => {
-  const [isRequestTabOpen, setIsRequestTabOpen] = useState(true);
-
+  const [requests, setRequests] = useState<any[]>(
+    allNotifications?.requests ?? []
+  );
+  const [notifications, setNotifications] = useState<any[]>(
+    allNotifications?.notifications ?? []
+  );
+  const [isRequestTabOpen, setIsRequestTabOpen] = useState(
+    requests.length > notifications.length ? true : false
+  );
   const popupRef = useRef<HTMLDivElement>(null);
+  const { token } = useAuth();
+  const acceptInvite = (userId: string) => {
+    fetch("http://localhost:3000/api/user/acceptInvite", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        toUserId: userId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setRequests(response);
+      });
+  };
+  const declineInvite = (userId: string) => {
+    fetch("http://localhost:3000/api/user/declineInvite", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        toUserId: userId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setRequests(response);
+      });
+  };
   useEffect(() => {
     const handleClickOutside = (e: any) => {
       if (!popupRef.current?.contains(e.target)) {
@@ -37,16 +78,25 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
         </p>
 
         {isRequestTabOpen ? (
-          (notifications?.requests ?? []).length > 0 ? (
-            notifications?.requests.map((req) => (
-              <Notification user={req} isRequest={true} />
+          requests.length > 0 ? (
+            requests.map((user) => (
+              <Notification
+                user={user}
+                isRequest={true}
+                acceptInvite={() => acceptInvite(user._id)}
+                declineInvite={() => declineInvite(user._id)}
+              />
             ))
           ) : (
             <p className="text-left pl-3">There is no request</p>
           )
-        ) : (notifications?.notifications ?? []).length > 0 ? (
-          notifications?.notifications.map((not) => (
-            <Notification user={not} text={not.text} isRequest={false} />
+        ) : notifications.length > 0 ? (
+          notifications.map((not) => (
+            <Notification
+              user={not.user}
+              notificationType={not.notificationType}
+              isRequest={false}
+            />
           ))
         ) : (
           <p className="text-left pl-3">There is no notification</p>
