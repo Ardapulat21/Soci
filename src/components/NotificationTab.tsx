@@ -3,21 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import Notification from "./Notification";
 import { useAuth } from "../context/AuthProvider";
 interface NotificationTabProps {
-  allNotifications?: NotificationProps;
+  notifications?: any[];
+  requests?: any[];
   onClose: () => void;
 }
 const NotificationTab: React.FC<NotificationTabProps> = ({
-  allNotifications,
+  notifications,
+  requests,
   onClose,
 }) => {
-  const [requests, setRequests] = useState<any[]>(
-    allNotifications?.requests ?? []
-  );
-  const [notifications, setNotifications] = useState<any[]>(
-    allNotifications?.notifications ?? []
+  const [requestState, setRequestState] = useState<any[]>(requests ?? []);
+  const [notificationState, setNotificationState] = useState<any[]>(
+    notifications ?? []
   );
   const [isRequestTabOpen, setIsRequestTabOpen] = useState(
-    requests.length > notifications.length ? true : false
+    requestState.length > notificationState.length ? true : false
   );
   const popupRef = useRef<HTMLDivElement>(null);
   const { token } = useAuth();
@@ -34,7 +34,7 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
     })
       .then((response) => response.json())
       .then((response) => {
-        setRequests(response);
+        setRequestState(response);
       });
   };
   const declineInvite = (userId: string) => {
@@ -50,7 +50,7 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
     })
       .then((response) => response.json())
       .then((response) => {
-        setRequests(response);
+        setRequestState(response);
       });
   };
   useEffect(() => {
@@ -78,8 +78,8 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
         </p>
 
         {isRequestTabOpen ? (
-          requests.length > 0 ? (
-            requests.map((user) => (
+          requestState.length > 0 ? (
+            requestState.map((user) => (
               <Notification
                 user={user}
                 isRequest={true}
@@ -90,8 +90,8 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
           ) : (
             <p className="text-left pl-3">There is no request</p>
           )
-        ) : notifications.length > 0 ? (
-          notifications.map((not) => (
+        ) : notificationState.length > 0 ? (
+          notificationState.map((not) => (
             <Notification
               user={not.user}
               notificationType={not.notificationType}

@@ -13,7 +13,9 @@ const Header = () => {
   const [isProfileTabOpen, setIsProfileTabOpen] = useState(false);
   const [isNotificationTabOpen, setIsNotificationTabOpen] = useState(false);
   const { token, currentUser } = useAuth();
-  const [notifications, setNotifications] = useState<NotificationProps>();
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [requests, setRequests] = useState<any[]>([]);
+
   useEffect(() => {
     fetch("http://localhost:3000/api/user/fetchUserById", {
       method: "POST",
@@ -27,10 +29,8 @@ const Header = () => {
     })
       .then((response) => response.json())
       .then((response) => {
-        setNotifications({
-          requests: response.pendingRequests,
-          notifications: response.notifications,
-        });
+        setRequests(response.pendingRequests);
+        setNotifications(response.notifications);
       });
   }, []);
   return (
@@ -64,13 +64,14 @@ const Header = () => {
               className="p-1 size-7 text-gray-600 font-light rounded-full hover:bg-blue-300 hover:text-white hover:cursor-pointer"
               onClick={() => setIsNotificationTabOpen(!isNotificationTabOpen)}
             ></Bell>
-            {(notifications?.notifications ?? []).length > 0 ||
-              ((notifications?.requests ?? []).length > 0 && (
+            {notifications.length > 0 ||
+              (requests.length > 0 && (
                 <span className="absolute top-0 right-0.5 h-3 w-3 rounded-full bg-red-500 border-2 border-white" />
               ))}
             {isNotificationTabOpen && (
               <NotificationTab
-                allNotifications={notifications}
+                requests={requests}
+                notifications={notifications}
                 onClose={() => setIsNotificationTabOpen(false)}
               />
             )}
