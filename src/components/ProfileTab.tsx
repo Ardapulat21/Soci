@@ -27,22 +27,19 @@ const ProfileTab: React.FC<ProfileTab> = ({ onClose }) => {
         ref={popupRef}
         className="absolute flex flex-col top-10 right-2 border-1 min-w-50 border-blue-300 bg-white text-gray-600"
       >
-        <div className="flex flex-row justify-start items-center space-x-3 rounded-xl w-30 py-2 px-2 ">
+        <button
+          className="flex flex-row justify-start items-center space-x-3 py-2 px-2 hover:bg-gray-100 hover:cursor-pointer"
+          onClick={() => {
+            navigate("/Profile");
+          }}
+        >
           <img
             className="object-cover rounded-full size-10"
             src={`http://localhost:3000/${currentUser?.imgUrl}`}
           />
           <div className="text-l font-semibold">{currentUser?.username}</div>
-        </div>
-        <button
-          className="flex flex-row text-left pl-2 py-2 items-center hover:bg-gray-100 hover:cursor-pointer"
-          onClick={() => {
-            navigate("/Profile");
-          }}
-        >
-          <UserRound className="size-5 text-blue-400 border rounded-full mr-1" />
-          <p>Profile</p>
         </button>
+
         <button
           className="flex flex-row text-left text-red-500 pl-2 py-2 items-center hover:bg-gray-100 hover:cursor-pointer"
           onClick={logout}
