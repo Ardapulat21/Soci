@@ -53,7 +53,21 @@ const FriendsPage: React.FC = () => {
           </div>
           <div className="flex flex-col justify-center items-center min-w-60">
             {friends.map((profile) => (
-              <FriendComponent profile={profile} isFriend={true} />
+              <FriendComponent
+                profile={profile}
+                isFriend={true}
+                updateFriends={(_id: string) => {
+                  const index = friends.findIndex(
+                    (friend) => friend._id == _id
+                  );
+                  if (index !== -1) {
+                    const updatedFriends = friends.filter(
+                      (_, i) => i !== index
+                    );
+                    setFriends(updatedFriends);
+                  }
+                }}
+              />
             ))}
           </div>
         </div>

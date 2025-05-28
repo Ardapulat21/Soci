@@ -1,4 +1,4 @@
-import { Check, UserPlus } from "lucide-react";
+import { Check, Cross, UserPlus, X } from "lucide-react";
 import type { User } from "../pages/HomePage";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -8,11 +8,13 @@ interface FriendProps {
   profile: User;
   isFriend: boolean;
   isInvited?: boolean;
+  updateFriends?: (_id: string) => void;
 }
 const FriendComponent: React.FC<FriendProps> = ({
   profile,
   isFriend,
   isInvited,
+  updateFriends,
 }) => {
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -29,6 +31,24 @@ const FriendComponent: React.FC<FriendProps> = ({
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
+  };
+  const remove = () => {
+    fetch("http://localhost:3000/api/user/removeFriend", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ toUserId: profile._id }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        updateFriends?.(profile._id);
       })
       .catch((err) => {
         console.error(err.message);
@@ -51,24 +71,30 @@ const FriendComponent: React.FC<FriendProps> = ({
         </p>
       </div>
       <div className="pl-45 ">
-        {!isFriend &&
-          (isFriendInvited ? (
-            <Check
-              className="p-1 mx-auto hover:cursor-pointer hover:bg-gray-300 rounded-full"
-              onClick={() => {
-                invite();
-                setIsFriendInvited(!isFriendInvited);
-              }}
-            />
-          ) : (
-            <UserPlus
-              className="p-1 mx-auto hover:cursor-pointer hover:bg-gray-300 rounded-full"
-              onClick={() => {
-                invite();
-                setIsFriendInvited(!isFriendInvited);
-              }}
-            />
-          ))}
+        {isFriend ? (
+          <X
+            className="p-1 mx-auto hover:cursor-pointer hover:bg-gray-300 rounded-full"
+            onClick={() => {
+              remove();
+            }}
+          />
+        ) : isFriendInvited ? (
+          <Check
+            className="p-1 mx-auto hover:cursor-pointer hover:bg-gray-300 rounded-full"
+            onClick={() => {
+              invite();
+              setIsFriendInvited(!isFriendInvited);
+            }}
+          />
+        ) : (
+          <UserPlus
+            className="p-1 mx-auto hover:cursor-pointer hover:bg-gray-300 rounded-full"
+            onClick={() => {
+              invite();
+              setIsFriendInvited(!isFriendInvited);
+            }}
+          />
+        )}
       </div>
     </div>
   );
