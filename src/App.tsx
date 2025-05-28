@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthProvider";
 import PublicRoute from "./routes/publicRoute";
 import HomePage from "./pages/HomePage";
 import FriendsPage from "./pages/FriendsPage";
+import ProfilePage from "./pages/ProfilePage";
 function App() {
   return (
     <AuthProvider>
@@ -31,6 +32,7 @@ function App() {
           >
             <Route index element={<HomePage />}></Route>
             <Route path="/Friends" element={<FriendsPage />}></Route>
+            <Route path="/Profile" element={<ProfilePage />}></Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

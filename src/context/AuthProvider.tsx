@@ -4,6 +4,7 @@ import type { User } from "../pages/HomePage";
 interface AuthContextType {
   token: string | null;
   currentUser: User | null;
+  updateUser: (data: User) => void;
   login: (data: any) => void;
   logout: () => void;
 }
@@ -24,6 +25,17 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     }
   }, []);
 
+  const updateUser = (data: User) => {
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        _id: data._id,
+        username: data.username,
+        imgUrl: data.imgUrl,
+      })
+    );
+    setCurrentUser(data);
+  };
   const login = (data: any) => {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
@@ -39,7 +51,9 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, currentUser, login, logout }}>
+    <AuthContext.Provider
+      value={{ token, currentUser, login, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
