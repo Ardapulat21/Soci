@@ -37,42 +37,66 @@ export interface User {
 const HomePage: React.FC = () => {
   const { token, logout } = useAuth();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const [homePosts, setHomePosts] = useState<Post[]>([]);
   const [isPostCreationWindowOpen, setIsPostCreationWindowOpen] =
     useState(false);
-
+  const [isExploreMode, setIsExploreMode] = useState(false);
   const updateContents = (newPost: Post) => {
-    const updatedPost = [newPost, ...posts];
-    setPosts(updatedPost);
+    const updatedPost = [newPost, ...allPosts];
+    setAllPosts(updatedPost);
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/post", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          logout();
-          navigate("/auth");
-          throw new Error("Authentication is failed " + response.statusText);
-        }
-        return response.json();
+    const fetchAllPost = async () => {
+      fetch("http://localhost:3000/api/post/fetchExplorePosts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       })
-      .then((data) => {
-        data.sort(
-          (a: any, b: any) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-        setPosts(data);
+        .then((response) => {
+          if (!response.ok) {
+            logout();
+            navigate("/auth");
+            throw new Error("Authentication is failed " + response.statusText);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          data.reverse();
+          setAllPosts(data);
+        })
+        .catch((err) => console.error(err));
+    };
+    const fetchHomepagePosts = async () => {
+      fetch("http://localhost:3000/api/post/fetchHomepagePosts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       })
-      .catch((err) => console.error(err));
+        .then((response) => {
+          if (!response.ok) {
+            logout();
+            navigate("/auth");
+            throw new Error("Authentication is failed " + response.statusText);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          data.reverse();
+          setHomePosts(data);
+        })
+        .catch((err) => console.error(err));
+    };
+    fetchAllPost();
+    fetchHomepagePosts();
   }, []);
   return (
     <div className="pt-10 min-h-screen w-100 mx-auto">
-      <div className="flex flex-row justify-start w-full py-3 ">
+      <div></div>
+      <div className="flex flex-row justify-between w-full py-3 ">
         <button
           className="flex flex-row ml-2 border border-gray-300 bg-white py-1 px-2 rounded-full text-s font-light text-blue-500 hover:cursor-pointer"
           onClick={() => {
@@ -82,11 +106,33 @@ const HomePage: React.FC = () => {
           <Plus className="" />
           <p>New Post</p>
         </button>
+        <div className="flex flex-row">
+          <div
+            className={`px-3 py-1 rounded-l-2xl border border-gray-300 ${
+              isExploreMode ? "bg-white" : "bg-gray-300"
+            } font-light select-none hover:cursor-pointer`}
+            onClick={() => {
+              setIsExploreMode(false);
+            }}
+          >
+            Home
+          </div>
+          <div
+            className={`px-3 py-1 rounded-r-2xl border border-gray-300 ${
+              !isExploreMode ? "bg-white" : "bg-gray-300"
+            } font-light select-none hover:cursor-pointer`}
+            onClick={() => {
+              setIsExploreMode(true);
+            }}
+          >
+            Explore
+          </div>
+        </div>
       </div>
       <div>
-        {posts.map((post, key) => (
-          <Post key={key} post={post} />
-        ))}
+        {isExploreMode
+          ? allPosts.map((post, key) => <Post key={key} post={post} />)
+          : homePosts.map((post, key) => <Post key={key} post={post} />)}
       </div>
       {isPostCreationWindowOpen && (
         <PostCreationComponent

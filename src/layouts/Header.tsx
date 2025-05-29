@@ -46,9 +46,6 @@ const Header = () => {
                 <Link to="/">Home</Link>
               </li>
               <li className="hover:text-gray-100">
-                <Link to="/Explore">Explore</Link>
-              </li>
-              <li className="hover:text-gray-100">
                 <Link to="/Friends">Friends</Link>
               </li>
             </ul>
@@ -64,8 +61,8 @@ const Header = () => {
               className="p-1 size-7 text-gray-600 font-light rounded-full hover:bg-blue-300 hover:text-white hover:cursor-pointer"
               onClick={() => setIsNotificationTabOpen(!isNotificationTabOpen)}
             ></Bell>
-            {notifications.length > 0 ||
-              (requests.length > 0 && (
+            {notifications?.length > 0 ||
+              (requests?.length > 0 && (
                 <span className="absolute top-0 right-0.5 h-3 w-3 rounded-full bg-red-500 border-2 border-white" />
               ))}
             {isNotificationTabOpen && (

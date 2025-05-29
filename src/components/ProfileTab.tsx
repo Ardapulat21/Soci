@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthProvider";
-import { LogOut, UserRound } from "lucide-react";
+import { LogOut, Settings, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface ProfileTab {
@@ -27,19 +27,22 @@ const ProfileTab: React.FC<ProfileTab> = ({ onClose }) => {
         ref={popupRef}
         className="absolute flex flex-col top-10 right-2 border-1 min-w-50 border-blue-300 bg-white text-gray-600"
       >
-        <button
-          className="flex flex-row justify-start items-center space-x-3 py-2 px-2 hover:bg-gray-100 hover:cursor-pointer"
-          onClick={() => {
-            navigate("/Profile");
-          }}
-        >
+        <div className="flex flex-row justify-start items-center space-x-3 py-2 px-2 hover:bg-gray-100 hover:cursor-pointer">
           <img
             className="object-cover rounded-full size-10"
             src={`http://localhost:3000/${currentUser?.imgUrl}`}
           />
           <div className="text-l font-semibold">{currentUser?.username}</div>
+        </div>
+        <button
+          className="flex flex-row text-left pl-2 py-2 items-center hover:bg-gray-100 hover:cursor-pointer"
+          onClick={() => {
+            navigate("/Profile");
+          }}
+        >
+          <Settings className="size-5 mr-1" />
+          <p>Settings</p>
         </button>
-
         <button
           className="flex flex-row text-left text-red-500 pl-2 py-2 items-center hover:bg-gray-100 hover:cursor-pointer"
           onClick={logout}

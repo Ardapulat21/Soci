@@ -1,5 +1,5 @@
 import { X, Check } from "lucide-react";
-import type { User } from "..//pages/HomePage";
+import type { User } from "../pages/HomePage";
 
 interface NotificationProps {
   user: User;
