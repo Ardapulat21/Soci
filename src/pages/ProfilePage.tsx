@@ -1,72 +1,84 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import type { Post, User } from "./HomePage";
 import { useAuth } from "../context/AuthProvider";
-import { useRef } from "react";
+import PostComponent from "../components/PostComponent";
 
 const ProfilePage: React.FC = () => {
-  const { token, currentUser, updateUser } = useAuth();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleChange = (event: React.ChangeEvent) => {
-    const file = fileInputRef?.current?.files?.[0];
-
-    const formData = new FormData();
-    if (file) formData.append("image", file);
-    formData.append("id", `${currentUser?._id}`);
-    formData.append("username", `${currentUser?.username}`);
-
-    fetch("http://localhost:3000/api/user/profilePhoto", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("error");
-        }
-        return response.json();
+  const { token } = useAuth();
+  const { userId } = useParams<{ userId: string }>();
+  const [user, setUser] = useState<User | null>(null);
+  const [posts, setPosts] = useState<Post[]>([]);
+  useEffect(() => {
+    const fetchUser = () => {
+      fetch("http://localhost:3000/api/user/fetchUserById", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: userId,
+        }),
       })
-      .then((response) => {
-        console.log(response);
-        const data = {
-          _id: response._id,
-          username: response.username,
-          imgUrl: response.imgUrl,
-        };
-        updateUser(data);
+        .then((response) => response.json())
+        .then((response) => {
+          setUser(response);
+        })
+        .catch((err) => console.error(err));
+    };
+    const fetchPosts = () => {
+      fetch("http://localhost:3000/api/post/fetchProfilePosts", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          id: userId,
+        }),
       })
-      .catch((error) => console.error(error));
-  };
+        .then((response) => response.json())
+        .then((response) => {
+          setPosts(response);
+          console.log("Posts:", response);
+        })
+        .catch((err) => console.error(err));
+    };
+    fetchUser();
+    fetchPosts();
+  }, []);
   return (
-    <div className="w-screen h-screen pt-10 flex flex-col justify-center items-center font-light  text-black ">
-      <div className="">
-        <div className="flex flex-col items-center justify-between space-x-10">
-          <form className="mx-auto" encType="multipart/form-data" method="post">
+    <div className="flex flex-col pt-10 min-h-screen">
+      <div className="mx-10">
+        <div className="relative h-35">
+          <div className="absolute z-0">
             <img
-              className="size-30 rounded-full object-contain mx-auto "
-              src={`http://localhost:3000/${currentUser?.imgUrl}`}
-            />
-            <label
-              className="hover:cursor-pointer text-blue-400 select-none"
-              onClick={() => fileInputRef?.current?.click()}
-            >
-              Change profile photo
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              ref={fileInputRef}
-              onChange={handleChange}
-            />
-          </form>
-          <div className="flex flex-col">
-            <p className="text-2xl border-b">{currentUser?.username}</p>
+              className="w-screen object-fit h-30"
+              src={
+                user?.bannerUrl
+                  ? `http://localhost:3000/${user?.bannerUrl}`
+                  : `http://localhost:3000/uploads/banner.png`
+              }
+            ></img>
           </div>
+          <div className="absolute flex flex-col ml-10 mt-10 justify-start items-start">
+            <img
+              className="size-30 rounded-full object-fit border border-white"
+              src={`http://localhost:3000/${user?.imgUrl}`}
+            />
+          </div>
+        </div>
+        <div className="flex flex-col justify-start items-start pl-18 mt-5 text-2xl font-light">
+          <p>{user?.username}</p>
+        </div>
+        <div className="mx-auto mt-5 mb-20 max-w-180">
+          {posts.map((post) => (
+            <PostComponent post={post} />
+          ))}
         </div>
       </div>
     </div>
   );
 };
-
 export default ProfilePage;

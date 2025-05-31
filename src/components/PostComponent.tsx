@@ -4,28 +4,25 @@ import { getDateDifference } from "../utils/utils";
 import { ThumbsUp, MessageCircle, Forward, SendHorizonal } from "lucide-react";
 import CommentComponent from "./CommentComponent";
 import { useAuth } from "../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 interface PostProps {
   post: Post;
 }
 const PostComponent: React.FC<PostProps> = ({ post }) => {
+  const { token, currentUser } = useAuth();
   const [commentToBeAdded, setCommentToBeAdded] = useState("");
   const [isPostLiked, setIsPostLiked] = useState(false);
   const [likes, setLikes] = useState<[]>(post.likes);
   const [comments, setComments] = useState<[]>(post.comments);
-
-  const { token, currentUser } = useAuth();
-
+  const navigate = useNavigate();
   const data = {
     postId: post._id,
     userId: currentUser?._id,
   };
 
-  const checkIfPostLiked = () => {
+  useEffect(() => {
     const isLiked = post.likes.some((like) => like["_id"] == data.userId);
     setIsPostLiked(isLiked);
-  };
-  useEffect(() => {
-    checkIfPostLiked();
   }, []);
 
   const likePost = async () => {
@@ -73,14 +70,22 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
     setCommentToBeAdded("");
   };
   return (
-    <div className="w-full border-1 border-gray-300 bg-white shadow p-4 mb-2">
+    <div className="w-full border-1 border-gray-300 bg-white shadow p-4 mb-2 select-none">
       <div className="flex flex-row mb-2">
         <img
-          className="size-12 object-cover rounded-full "
+          className="size-12 object-cover rounded-full hover:cursor-pointer"
           src={`http://localhost:3000/${post.user.imgUrl}`}
+          onClick={() => {
+            navigate(`profile/${post.user._id}`);
+          }}
         />
         <div className="flex flex-row justify-between w-full text-l text-gray-700 font-medium ml-2">
-          <p>{post.user.username}</p>
+          <a
+            href={`/profile/${post.user._id}`}
+            className="hover:cursor-pointer"
+          >
+            {post.user.username}
+          </a>
           <p className="text-sm font-light">{getDateDifference(post.date)}</p>
         </div>
       </div>

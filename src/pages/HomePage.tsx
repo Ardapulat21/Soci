@@ -23,6 +23,7 @@ export interface User {
   _id: string;
   username: string;
   imgUrl: string;
+  bannerUrl?: string;
   friends?: User[];
   pendingRequests?: User[];
   invitedUsers?: User[];
@@ -43,8 +44,8 @@ const HomePage: React.FC = () => {
     useState(false);
   const [isExploreMode, setIsExploreMode] = useState(false);
   const updateContents = (newPost: Post) => {
-    const updatedPost = [newPost, ...allPosts];
-    setAllPosts(updatedPost);
+    const updatedPost = [newPost, ...homePosts];
+    setHomePosts(updatedPost);
   };
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const HomePage: React.FC = () => {
         .then((data) => {
           data.reverse();
           setAllPosts(data);
+          console.log("allPosts:", data);
         })
         .catch((err) => console.error(err));
     };
@@ -87,6 +89,7 @@ const HomePage: React.FC = () => {
         .then((data) => {
           data.reverse();
           setHomePosts(data);
+          console.log("homeposts:", data);
         })
         .catch((err) => console.error(err));
     };
@@ -131,8 +134,8 @@ const HomePage: React.FC = () => {
       </div>
       <div>
         {isExploreMode
-          ? allPosts.map((post, key) => <Post key={key} post={post} />)
-          : homePosts.map((post, key) => <Post key={key} post={post} />)}
+          ? allPosts.map((post) => <Post key={post._id} post={post} />)
+          : homePosts.map((post) => <Post key={post._id} post={post} />)}
       </div>
       {isPostCreationWindowOpen && (
         <PostCreationComponent

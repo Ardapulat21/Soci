@@ -1,4 +1,4 @@
-import { Check, Cross, UserPlus, X } from "lucide-react";
+import { Check, UserPlus, X } from "lucide-react";
 import type { User } from "../pages/HomePage";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";

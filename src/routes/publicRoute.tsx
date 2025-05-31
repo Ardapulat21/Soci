@@ -4,9 +4,10 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
 const PublicRoute: React.FC<PropsWithChildren> = ({ children }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
 
-  return currentUser ? <Navigate to="/" /> : children;
+  if (loading) return null;
+  return currentUser ? <Navigate to="/" replace /> : children;
 };
 
 export default PublicRoute;

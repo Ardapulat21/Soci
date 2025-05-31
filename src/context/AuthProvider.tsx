@@ -4,6 +4,7 @@ import type { User } from "../pages/HomePage";
 interface AuthContextType {
   token: string | null;
   currentUser: User | null;
+  loading: boolean;
   updateUser: (data: User) => void;
   login: (data: any) => void;
   logout: () => void;
@@ -14,6 +15,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
@@ -22,6 +24,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
       setToken(storedToken);
       setCurrentUser(JSON.parse(storedUser));
     }
+    setLoading(false);
   }, []);
 
   const updateUser = (data: User) => {
@@ -51,9 +54,9 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, currentUser, login, logout, updateUser }}
+      value={{ token, currentUser, login, logout, updateUser, loading }}
     >
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

@@ -5,9 +5,10 @@ import HomeLayout from "./layouts/HomeLayout";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthProvider";
-import PublicRoute from "./routes/publicRoute";
 import HomePage from "./pages/HomePage";
+import PublicRoute from "./routes/publicRoute";
 import FriendsPage from "./pages/FriendsPage";
+import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 function App() {
   return (
@@ -32,7 +33,8 @@ function App() {
           >
             <Route index element={<HomePage />}></Route>
             <Route path="/Friends" element={<FriendsPage />}></Route>
-            <Route path="/Profile" element={<ProfilePage />}></Route>
+            <Route path="/Settings" element={<SettingsPage />}></Route>
+            <Route path="/Profile/:userId" element={<ProfilePage />}></Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

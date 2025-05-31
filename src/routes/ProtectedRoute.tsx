@@ -1,13 +1,15 @@
+// components/PrivateRoute.tsx
 import { Navigate } from "react-router-dom";
+import React from "react";
 import { useAuth } from "../context/AuthProvider";
-import type { PropsWithChildren } from "react";
 
-type ProtectedRouteProps = PropsWithChildren;
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  children,
-}: ProtectedRouteProps) => {
-  const { currentUser } = useAuth();
-  return currentUser ? children : <Navigate to="/auth" />;
+interface PrivateRouteProps {
+  children: React.ReactNode;
+}
+
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
+  const { token } = useAuth();
+  return token ? children : <Navigate to={"auth"} />;
 };
 
-export default ProtectedRoute;
+export default PrivateRoute;
