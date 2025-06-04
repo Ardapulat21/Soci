@@ -43,7 +43,7 @@ const SettingsPage: React.FC = () => {
         <div className="flex flex-col items-center justify-between space-x-10">
           <form className="mx-auto" encType="multipart/form-data" method="post">
             <img
-              className="size-30 rounded-full object-fit mx-auto"
+              className="size-30 rounded-full object-cover mx-auto"
               src={`http://localhost:3000/${currentUser?.imgUrl}`}
             />
             <label

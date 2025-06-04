@@ -65,9 +65,7 @@ const HomePage: React.FC = () => {
           return response.json();
         })
         .then((data) => {
-          data.reverse();
           setAllPosts(data);
-          console.log("allPosts:", data);
         })
         .catch((err) => console.error(err));
     };
@@ -87,9 +85,7 @@ const HomePage: React.FC = () => {
           return response.json();
         })
         .then((data) => {
-          data.reverse();
           setHomePosts(data);
-          console.log("homeposts:", data);
         })
         .catch((err) => console.error(err));
     };

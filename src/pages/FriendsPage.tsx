@@ -58,7 +58,7 @@ const FriendsPage: React.FC = () => {
                 isFriend={true}
                 updateFriends={(_id: string) => {
                   const index = friends.findIndex(
-                    (friend) => friend._id == _id
+                    (friend) => friend._id.toString() == _id
                   );
                   if (index !== -1) {
                     const updatedFriends = friends.filter(

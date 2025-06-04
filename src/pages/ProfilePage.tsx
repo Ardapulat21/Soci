@@ -41,7 +41,6 @@ const ProfilePage: React.FC = () => {
         .then((response) => response.json())
         .then((response) => {
           setPosts(response);
-          console.log("Posts:", response);
         })
         .catch((err) => console.error(err));
     };
@@ -74,7 +73,7 @@ const ProfilePage: React.FC = () => {
         </div>
         <div className="mx-auto mt-5 mb-20 max-w-180">
           {posts.map((post) => (
-            <PostComponent post={post} />
+            <PostComponent key={post._id} post={post} />
           ))}
         </div>
       </div>
