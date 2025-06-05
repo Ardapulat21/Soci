@@ -67,7 +67,7 @@ const Footer = () => {
                   }}
                 >
                   <img
-                    className="size-8  object-fit rounded-full"
+                    className="size-8 object-cover rounded-full"
                     src={`http://localhost:3000/${friend.imgUrl}`}
                   ></img>
                   <p>{friend.username}</p>

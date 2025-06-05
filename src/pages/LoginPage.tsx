@@ -59,11 +59,13 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="h-screen py-10 text-gray-500 ">
+    <div className="h-screen bg-[url('/bg.png')] bg-cover py-10 text-gray-500 ">
       <div className="flex flex-row justify-center p-4 space-x-4 font-light h-full ">
-        <div className="flex justify-center items-center w-85 rounded-l bg-linear-to-r/decreasing from-pink-300 to-blue-100">
-          <div className="absolute top-2 size-24 rounded-full bg-conic-180 from-pink-600 via-indigo-50 to-pink-600"></div>
-          <p>Hey its soci! your social platform</p>
+        <div className="flex justify-center items-center w-85 rounded-l ">
+          <div className="absolute top-2 size-24 rounded-full "></div>
+          <p className="text-7xl text-white font-cursive">
+            Hey its soci! your social platform
+          </p>
         </div>
         <div className="flex flex-col justify-center items-center w-85 h-full rounded-l bg-linear-to-r/increasing from-blue-100 to-indigo-300">
           <div className="absolute top-2 size-24 rounded-full bg-conic-180 from-indigo-600 via-indigo-50 to-indigo-600"></div>
