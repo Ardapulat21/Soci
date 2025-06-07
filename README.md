@@ -1,6 +1,7 @@
 # Soci
 
 Soci is a modern and full-featured social media web application built with **JavaScript**, **TypeScript**, and **MongoDB**. It allows users to connect, share, and engage through posts, messaging, and real-time notifications.
+<a href="http://144.91.99.115:5174">Here is to check the website</a>
 
 ## Features
 
