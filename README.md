@@ -2,17 +2,17 @@
 
 Soci is a modern and full-featured social media web application built with **JavaScript**, **TypeScript**, and **MongoDB**. It allows users to connect, share, and engage through posts, messaging, and real-time notifications.
 
-## 🚀 Features
+## Features
 
-- 📝 **Post Creation**: Share text posts with or without images.
-- ❤️ **Likes & Comments**: Interact with posts through likes and comments.
-- 💬 **Messaging**: Send and receive direct messages between users.
-- 🤝 **Friendship & Invitations**: Add friends and manage connection requests.
-- 🔔 **Notifications**: Get real-time notifications for likes, comments, messages, and friend requests.
-- 📸 **Image Uploads**: Upload and display images within posts.
+-  **Post Creation**: Share text posts with or without images.
+-  **Likes & Comments**: Interact with posts through likes and comments.
+-  **Messaging**: Send and receive direct messages between users.
+-  **Friendship & Invitations**: Add friends and manage connection requests.
+-  **Notifications**: Get real-time notifications for likes, comments, messages, and friend requests.
+-  **Image Uploads**: Upload and display images within posts.
 
 
-## 🛠️ Tech Stack
+## Tech
 
 - **Frontend**: JavaScript / TypeScript
 - **Backend**: Node.js / Express.js
