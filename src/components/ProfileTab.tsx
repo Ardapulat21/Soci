@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthProvider";
-import { LogOut, Settings, UserRound } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface ProfileTab {
@@ -35,7 +35,7 @@ const ProfileTab: React.FC<ProfileTab> = ({ onClose }) => {
         >
           <img
             className="object-cover rounded-full size-10"
-            src={`http://localhost:3000/${currentUser?.imgUrl}`}
+            src={`http://144.91.99.115:3001/${currentUser?.imgUrl}`}
           />
           <div className="text-l font-semibold">{currentUser?.username}</div>
         </div>

@@ -20,7 +20,7 @@ const FriendComponent: React.FC<FriendProps> = ({
   const navigate = useNavigate();
   const [isFriendInvited, setIsFriendInvited] = useState(isInvited);
   const invite = () => {
-    fetch("http://localhost:3000/api/user/invite", {
+    fetch("http://144.91.99.115:3001/api/user/invite", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ const FriendComponent: React.FC<FriendProps> = ({
       });
   };
   const remove = () => {
-    fetch("http://localhost:3000/api/user/removeFriend", {
+    fetch("http://144.91.99.115:3001/api/user/removeFriend", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ const FriendComponent: React.FC<FriendProps> = ({
       <div className="flex flex-row justify-center space-x-2 items-center">
         <img
           className="rounded-full size-12 "
-          src={`http://localhost:3000/${profile.imgUrl}`}
+          src={`http://144.91.99.115:3001/${profile.imgUrl}`}
         />
         <p
           className="font-light hover:cursor-pointer"

@@ -12,12 +12,12 @@ const FriendsPage: React.FC = () => {
     const fetchData = async () => {
       try {
         const [userResponse, friendsResponse] = await Promise.all([
-          fetch("http://localhost:3000/api/user", {
+          fetch("http://144.91.99.115:3001/api/user", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }),
-          fetch("http://localhost:3000/api/user/fetchFriends", {
+          fetch("http://144.91.99.115:3001/api/user/fetchFriends", {
             headers: {
               Authorization: `Bearer ${token}`,
             },

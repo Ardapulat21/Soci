@@ -29,7 +29,7 @@ const MessageComponent: React.FC<MessageProps> = ({
   const room = getRoomName(currentUser?._id, receiverFriend?._id);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/message/fetchMessages", {
+    fetch("http://144.91.99.115:3001/api/message/fetchMessages", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ const MessageComponent: React.FC<MessageProps> = ({
           <div className="flex flex-row items-center p-1 space-x-2 ">
             <img
               className="size-7 object-cover rounded-full"
-              src={`http://localhost:3000/${receiverFriend?.imgUrl}`}
+              src={`http://144.91.99.115:3001/${receiverFriend?.imgUrl}`}
             />
             <p>{receiverFriend?.username}</p>
           </div>
@@ -107,8 +107,8 @@ const MessageComponent: React.FC<MessageProps> = ({
                     className="size-6 object-cover border border-white rounded-full mx-1"
                     src={
                       receiverFriend?._id.toString() === messageInfo.senderId
-                        ? `http://localhost:3000/${receiverFriend?.imgUrl}`
-                        : `http://localhost:3000/${currentUser?.imgUrl}`
+                        ? `http://144.91.99.115:3001/${receiverFriend?.imgUrl}`
+                        : `http://144.91.99.115:3001/${currentUser?.imgUrl}`
                     }
                   />
                   <p>{messageInfo.message}</p>

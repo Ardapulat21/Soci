@@ -1,14 +1,10 @@
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
 import { useAuth } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
 import NotificationTab from "../components/NotificationTab";
 import ProfileTab from "../components/ProfileTab";
 import { useEffect, useState } from "react";
 
-export interface NotificationProps {
-  requests: any[];
-  notifications: any[];
-}
 const Header = () => {
   const [isProfileTabOpen, setIsProfileTabOpen] = useState(false);
   const [isNotificationTabOpen, setIsNotificationTabOpen] = useState(false);
@@ -17,7 +13,7 @@ const Header = () => {
   const [requests, setRequests] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/user/fetchUserById", {
+    fetch("http://144.91.99.115:3001/api/user/fetchUserById", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -74,7 +70,7 @@ const Header = () => {
           <div>
             <img
               className="object-cover rounded-full size-7"
-              src={`http://localhost:3000/${currentUser?.imgUrl}`}
+              src={`http://144.91.99.115:3001/${currentUser?.imgUrl}`}
               onClick={() => setIsProfileTabOpen(!isProfileTabOpen)}
             />
             {isProfileTabOpen && (

@@ -1,4 +1,3 @@
-import type { NotificationProps } from "../layouts/Header";
 import { useEffect, useRef, useState } from "react";
 import Notification from "./Notification";
 import { useAuth } from "../context/AuthProvider";
@@ -22,7 +21,7 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
   const popupRef = useRef<HTMLDivElement>(null);
   const { token } = useAuth();
   const acceptInvite = (userId: string) => {
-    fetch("http://localhost:3000/api/user/acceptInvite", {
+    fetch("http://144.91.99.115:3001/api/user/acceptInvite", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -38,7 +37,7 @@ const NotificationTab: React.FC<NotificationTabProps> = ({
       });
   };
   const declineInvite = (userId: string) => {
-    fetch("http://localhost:3000/api/user/declineInvite", {
+    fetch("http://144.91.99.115:3001/api/user/declineInvite", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

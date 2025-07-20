@@ -11,7 +11,7 @@ const ProfilePage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   useEffect(() => {
     const fetchUser = () => {
-      fetch("http://localhost:3000/api/user/fetchUserById", {
+      fetch("http://144.91.99.115:3001/api/user/fetchUserById", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,7 +28,7 @@ const ProfilePage: React.FC = () => {
         .catch((err) => console.error(err));
     };
     const fetchPosts = () => {
-      fetch("http://localhost:3000/api/post/fetchProfilePosts", {
+      fetch("http://144.91.99.115:3001/api/post/fetchProfilePosts", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -56,15 +56,15 @@ const ProfilePage: React.FC = () => {
               className="w-screen object-fit h-30"
               src={
                 user?.bannerUrl
-                  ? `http://localhost:3000/${user?.bannerUrl}`
-                  : `http://localhost:3000/uploads/banner.png`
+                  ? `http://144.91.99.115:3001/${user?.bannerUrl}`
+                  : `http://144.91.99.115:3001/uploads/banner.png`
               }
             ></img>
           </div>
           <div className="absolute flex flex-col ml-10 mt-10 justify-start items-start">
             <img
               className="size-30 rounded-full object-fit border border-white"
-              src={`http://localhost:3000/${user?.imgUrl}`}
+              src={`http://144.91.99.115:3001/${user?.imgUrl}`}
             />
           </div>
         </div>

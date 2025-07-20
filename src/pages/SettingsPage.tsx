@@ -13,7 +13,7 @@ const SettingsPage: React.FC = () => {
     formData.append("id", `${currentUser?._id}`);
     formData.append("username", `${currentUser?.username}`);
 
-    fetch("http://localhost:3000/api/user/profilePhoto", {
+    fetch("http://144.91.99.115:3001/api/user/profilePhoto", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ const SettingsPage: React.FC = () => {
           <form className="mx-auto" encType="multipart/form-data" method="post">
             <img
               className="size-30 rounded-full object-cover mx-auto"
-              src={`http://localhost:3000/${currentUser?.imgUrl}`}
+              src={`http://144.91.99.115:3001/${currentUser?.imgUrl}`}
             />
             <label
               className="hover:cursor-pointer text-blue-400 select-none"

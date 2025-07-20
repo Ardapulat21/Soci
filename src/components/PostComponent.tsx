@@ -26,7 +26,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
   }, []);
 
   const likePost = async () => {
-    await fetch("http://localhost:3000/api/post/like", {
+    await fetch("http://144.91.99.115:3001/api/post/like", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
       .catch((err) => console.error(err));
   };
   const makeComment = async () => {
-    await fetch("http://localhost:3000/api/post/comment", {
+    await fetch("http://144.91.99.115:3001/api/post/comment", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
       <div className="flex flex-row mb-2">
         <img
           className="size-12 object-cover rounded-full hover:cursor-pointer"
-          src={`http://localhost:3000/${post.user.imgUrl}`}
+          src={`http://144.91.99.115:3001/${post.user.imgUrl}`}
           onClick={() => {
             navigate(`profile/${post.user._id}`);
           }}
@@ -95,7 +95,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
           {post.imgUrl && (
             <img
               className="max-h-200"
-              src={`http://localhost:3000/${post.imgUrl}`}
+              src={`http://144.91.99.115:3001/${post.imgUrl}`}
             />
           )}
 
@@ -137,7 +137,7 @@ const PostComponent: React.FC<PostProps> = ({ post }) => {
           <div className="flex flex-row pt-4">
             <img
               className="size-10 object-cover rounded-full"
-              src={`http://localhost:3000/${currentUser?.imgUrl}`}
+              src={`http://144.91.99.115:3001/${currentUser?.imgUrl}`}
             />
             <form
               onSubmit={handleCommentSubmit}

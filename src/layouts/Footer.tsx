@@ -13,7 +13,7 @@ const Footer = () => {
   const [friends, setFriends] = useState<User[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/user/fetchFriends", {
+    fetch("http://144.91.99.115:3001/api/user/fetchFriends", {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-type": "application/json",
@@ -48,7 +48,7 @@ const Footer = () => {
             >
               <img
                 className="size-4 object-fit rounded-full"
-                src={`http://localhost:3000/${messagingFriend?.imgUrl}`}
+                src={`http://144.91.99.115:3001/${messagingFriend?.imgUrl}`}
               />
               <p>{messagingFriend?.username}</p>
             </div>
@@ -57,7 +57,7 @@ const Footer = () => {
         <div>
           {isMessagesTabOpen && (
             <div>
-              {friends.map((friend, key) => (
+              {friends.length > 0 ? friends.map((friend, key) => (
                 <div
                   key={key}
                   className="flex flex-row items-center space-x-3 pl-2 py-1 border-t border-l border-gray-300 bg-white hover:cursor-pointer"
@@ -68,11 +68,15 @@ const Footer = () => {
                 >
                   <img
                     className="size-8 object-cover rounded-full"
-                    src={`http://localhost:3000/${friend.imgUrl}`}
+                    src={`http://144.91.99.115:3001/${friend.imgUrl}`}
                   ></img>
                   <p>{friend.username}</p>
                 </div>
-              ))}
+              )) : 
+              <div className="border-t border-l border-r border-gray-300">
+                <p>No friends found.</p>
+              </div>
+              }
             </div>
           )}
           <div

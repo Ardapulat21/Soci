@@ -20,7 +20,7 @@ const Notification: React.FC<NotificationProps> = ({
       <div className="flex flex-row space-x-2 items-center">
         <img
           className="rounded-full size-10"
-          src={`http://localhost:3000/${user?.imgUrl}`}
+          src={`http://144.91.99.115:3001/${user?.imgUrl}`}
         />
         <p className="max-w-60 text-sm">
           {isRequest

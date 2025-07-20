@@ -50,7 +50,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     const fetchAllPost = async () => {
-      fetch("http://localhost:3000/api/post/fetchExplorePosts", {
+      fetch("http://144.91.99.115:3001/api/post/fetchExplorePosts", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const HomePage: React.FC = () => {
         .catch((err) => console.error(err));
     };
     const fetchHomepagePosts = async () => {
-      fetch("http://localhost:3000/api/post/fetchHomepagePosts", {
+      fetch("http://144.91.99.115:3001/api/post/fetchHomepagePosts", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

@@ -20,7 +20,7 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    fetch(`http://localhost:3000/api/auth/${isLogin ? "login" : "register"}`, {
+    fetch(`http://144.91.99.115:3001/api/auth/${isLogin ? "login" : "register"}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-[url('/bg.png')] bg-cover py-10 text-gray-500 ">
+    <div className="h-screen bg-[url('/bg.jpg')] bg-cover py-10 text-gray-500 ">
       <div className="flex flex-row justify-center p-4 space-x-4 font-light h-full ">
         <div className="flex justify-center items-center w-85 rounded-l ">
           <div className="absolute top-2 size-24 rounded-full "></div>

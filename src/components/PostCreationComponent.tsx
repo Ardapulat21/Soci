@@ -41,7 +41,7 @@ const PostCreationComponent = ({
     formData.append("imgUrl", `${currentUser?.imgUrl}`);
     formData.append("date", new Date().toString());
 
-    fetch("http://localhost:3000/api/post", {
+    fetch("http://144.91.99.115:3001/api/post", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ const PostCreationComponent = ({
         >
           <div className="flex flex-row space-x-3">
             <div className="size-14">
-              <img src={`http://localhost:3000/${currentUser?.imgUrl}`} />
+              <img src={`http://144.91.99.115:3001/${currentUser?.imgUrl}`} />
             </div>
             <div className="w-full">
               <textarea
